@@ -101,6 +101,10 @@ jobs:
       - name: Download Xygeni Scanner 
         run: |
           echo Downloading Xygeni Scanner ....
+          echo "===================================================================="
+          sudo lshw -short
+          lscpu
+          exit 1
 
           #curl -L https://get.xygeni.io/latest/scanner/install.sh | /bin/bash -s -- -u $XY_USERNAME -p $XY_PASSWORD -s $XY_URL -d ${GITHUB_WORKSPACE}/scanner 
           curl -L https://get.xygeni.io/latest/scanner/install.sh | /bin/bash -s -- -u $XY_USERNAME -p $XY_PASSWORD -s $XY_URL -d ${GITHUB_WORKSPACE}/scanner 
@@ -143,6 +147,9 @@ jobs:
           
           export LOC=$(grep -rIl '' | xargs wc -l | head -n -1 | awk '{total +=$1} END{print total}' )
           echo LOC/sec $(($LOC / $duration))
+
+
+          
           
         env:
           GITHUB_PAT: ${{ secrets.GH_PAT }}
