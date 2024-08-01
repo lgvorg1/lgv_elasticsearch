@@ -4,11 +4,11 @@ name: Xygeni CI/CD Security Scan
 
 # Controls when the workflow will run
 on:
-  push: 
-    branches: [ "main" ]
+  #push: 
+  #  branches: [ "main" ]
   # Triggers the workflow on pull request events for the "main" branch
-  pull_request_target: 
-    branches: [ "main" ]
+  #pull_request_target: 
+  #  branches: [ "main" ]
 
   # Allows you to run this workflow manually from the Actions tab sd 
   workflow_dispatch:
@@ -125,6 +125,7 @@ jobs:
             SECONDS=0
             /usr/bin/time --verbose ${GITHUB_WORKSPACE}/scanner/xygeni scan  --never-fail  -f none --include-collaborators --run="secrets" --secrets-mode=history --no-conf-download -n ${{ env.XY_PRJ_NAME }} --dir ${GITHUB_WORKSPACE} -e **/scanner/**
             duration=$SECONDS
+            echo Number of commits $(git log | grep "Author:" | wc -l)
           else
             echo "***********************"
             echo "Not including history"
