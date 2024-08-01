@@ -181,6 +181,6 @@ jobs:
           from: Luke Skywalker # <user@example.com>
           # Optional plain body:  
           body: INTERNAL Secret .\n Build job of ${{github.repository}} completed successfully!
-          attachments: ${GITHUB_WORKSPACE}/secrets.results.*
+          attachments: secrets.results.*
 
 
