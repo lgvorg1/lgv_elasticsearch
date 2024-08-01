@@ -140,7 +140,7 @@ jobs:
             duration=$SECONDS
           fi
           ls -l
-          ls -l ${GITHUB_WORKSPACE}/results*
+          ls -l ${GITHUB_WORKSPACE}/secrets.results*
           pwd
           echo "===================================================================="
           echo "seconds $duration"
@@ -181,6 +181,6 @@ jobs:
           from: Luke Skywalker # <user@example.com>
           # Optional plain body:  
           body: INTERNAL Secret .\n Build job of ${{github.repository}} completed successfully!
-          attachments: ${GITHUB_WORKSPACE}/results.*
+          attachments: ${GITHUB_WORKSPACE}/secrets.results.*
 
 
