@@ -68,56 +68,9 @@ jobs:
           /usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /tmp/gitleaks-8.16.1 -f /tmp/gitleaks.tmp
           #/usr/bin/tar --posix -z -cf cache.tgz -P -C /home/runner/work/elasticsearch/elasticsearch --files-from manifest.txt
           SECONDS=0
-          /usr/bin/time --verbose /tmp/gitleaks-8.16.1/gitleaks detect --redact -v --exit-code=2 --report-format=sarif --report-path=results.sarif --log-level=debug
+          #/usr/bin/time --verbose /tmp/gitleaks-8.16.1/gitleaks detect --redact -v --exit-code=2 --report-format=sarif --report-path=results.sarif --log-level=debug
+          /usr/bin/time --verbose /tmp/gitleaks-8.16.1/gitleaks detect --redact --no-git --exit-code=2 --report-format=sarif --report-path=results.sarif --log-level=debug
           duration=$SECONDS
           echo "seconds $duration"
           echo "$((duration / 60)) minutes and $((duration % 60)) seconds elapsed."
-          exit 1
-
-          #curl -L https://get.xygeni.io/latest/scanner/install.sh | /bin/bash -s -- -u $XY_USERNAME -p $XY_PASSWORD -s $XY_URL -d ${GITHUB_WORKSPACE}/scanner 
-          curl -L https://get.xygeni.io/latest/scanner/install.sh | /bin/bash -s -- -u $XY_USERNAME -p $XY_PASSWORD -s $XY_URL -d ${GITHUB_WORKSPACE}/scanner 
           
-          cat ${GITHUB_WORKSPACE}/scanner/conf/codetampering/ccm/workflow_modification.yml | grep changeTypesToConsider
-          sed -i 's/changeTypesToConsider: M/changeTypesToConsider: AM/g' ${GITHUB_WORKSPACE}/scanner/conf/codetampering/ccm/workflow_modification.yml
-          cat ${GITHUB_WORKSPACE}/scanner/conf/codetampering/ccm/workflow_modification.yml | grep changeTypesToConsider
-          cat ${GITHUB_WORKSPACE}/scanner/conf/codetampering/ccm/workflow_modification.yml 
-          
-      # Runs a set of commands using the runners shell
-      - name: Execution Xygeni Scanner (vuln)
-        run: |
-          echo Number of text files : $(grep -rIl '' | xargs wc -l | grep -v " 0" | wc -l  )
-          echo Lines in text files 1: $(grep -rIl '' | xargs wc -l | head -n -1 | awk '{total +=$1} END{print total}' )
-          echo Lines in text files 2: $(grep -rIl '' | xargs wc -l | grep -v " 0" | head -n -1 | awk '{total +=$1} END{print total}' )
-          echo Executing Xygeni scan ....    no HISTORY
-
-          if [ "$INCLUDE_GIT_HISTORY" == "true" ]; then
-            echo "***********************"
-            echo "Executing over history"
-            echo "***********************"
-            SECONDS=0
-            /usr/bin/time --verbose ${GITHUB_WORKSPACE}/scanner/xygeni scan  --never-fail  -f none --include-collaborators --run="secrets" --secrets-mode=history --no-conf-download -n ${{ env.XY_PRJ_NAME }} --dir ${GITHUB_WORKSPACE} -e **/scanner/**
-            duration=$SECONDS
-            echo Number of commits $(git log | grep "Author:" | wc -l)
-          else
-            echo "***********************"
-            echo "Not including history"
-            echo "***********************"
-            SECONDS=0
-            /usr/bin/time --verbose ${GITHUB_WORKSPACE}/scanner/xygeni scan  --never-fail  -f none --include-collaborators --run="secrets"  --no-conf-download -n ${{ env.XY_PRJ_NAME }} --dir ${GITHUB_WORKSPACE} -e **/scanner/**
-            duration=$SECONDS
-          fi
-          echo "===================================================================="
-          echo "seconds $duration"
-          echo "$((duration / 60)) minutes and $((duration % 60)) seconds elapsed."
-          echo Number of text files : $(grep -rIl '' | xargs wc -l | grep -v " 0" | wc -l  )
-          echo Lines in text files 1: $(grep -rIl '' | xargs wc -l | head -n -1 | awk '{total +=$1} END{print total}' )
-          echo Lines in text files 2: $(grep -rIl '' | xargs wc -l | grep -v " 0" | head -n -1 | awk '{total +=$1} END{print total}' )
-          
-          export LOC=$(grep -rIl '' | xargs wc -l | head -n -1 | awk '{total +=$1} END{print total}' )
-          echo LOC/sec $(($LOC / $duration))
-
-
-          
-          
-        env:
-          GITHUB_PAT: ${{ secrets.GH_PAT }}
