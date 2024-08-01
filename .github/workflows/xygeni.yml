@@ -92,13 +92,6 @@ jobs:
           fetch-depth: '0'
 
 
-      # Runs a single command using the runners shell
-      - name: Git Log
-        run: git log
-
-      # Runs a single command using the runners shell
-      - name: Cat pr.yml 
-        run: cat README.md
 
       # Runs a set of commands using the runners shell 
       - name: Download Xygeni Scanner 
