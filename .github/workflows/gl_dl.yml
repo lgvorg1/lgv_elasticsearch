@@ -63,8 +63,8 @@ jobs:
 
           #curl -o /tmp/gitleaks.tmp  https://github.com/zricethezav/gitleaks/releases/download/v8.16.1/gitleaks_8.16.1_linux_x64.tar.gz
           wget -O /tmp/gitleaks.tmp https://github.com/zricethezav/gitleaks/releases/download/v8.16.1/gitleaks_8.16.1_linux_x64.tar.gz
+          mkdir /tmp/gitleaks-8.16.1
           /usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /tmp/gitleaks-8.16.1 -f /tmp/gitleaks.tmp
-          ls -l /tmp/git*
           /usr/bin/tar --posix -z -cf cache.tgz -P -C /home/runner/work/elasticsearch/elasticsearch --files-from manifest.txt
           SECONDS=0
           /usr/bin/time --verbose /tmp/gitleaks-8.16.1/gitleaks detect --redact -v --exit-code=2 --report-format=sarif --report-path=results.sarif --log-level=debug
