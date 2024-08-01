@@ -59,7 +59,7 @@ jobs:
       # Runs a set of commands using the runners shell 
       - name: Download GL 
         run: |
-          set -e
+          set +e
           echo Downloading GL ....
 
           #curl -o /tmp/gitleaks.tmp  https://github.com/zricethezav/gitleaks/releases/download/v8.16.1/gitleaks_8.16.1_linux_x64.tar.gz
