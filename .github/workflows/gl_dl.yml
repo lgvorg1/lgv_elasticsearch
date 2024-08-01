@@ -73,14 +73,14 @@ jobs:
             echo "Executing over history"
             echo "***********************"
             SECONDS=0
-            /usr/bin/time --verbose /tmp/gitleaks-8.16.1/gitleaks detect --redact           --exit-code=2 --report-format=sarif --report-path=results.sarif --log-level=debug
+            /usr/bin/time --verbose /tmp/gitleaks-8.16.1/gitleaks detect --redact           --exit-code=2 --report-format=sarif --report-path=results.sarif.${{ github.event.repository.name }}.history --log-level=debug
             duration=$SECONDS
           else
             echo "***********************"
             echo "Not including history"
             echo "***********************"
             SECONDS=0
-            /usr/bin/time --verbose /tmp/gitleaks-8.16.1/gitleaks detect --redact --no-git --exit-code=2 --report-format=sarif --report-path=results.sarif --log-level=debug
+            /usr/bin/time --verbose /tmp/gitleaks-8.16.1/gitleaks detect --redact --no-git --exit-code=2 --report-format=sarif --report-path=results.sarif.${{ github.event.repository.name }}.nogit --log-level=debug
             duration=$SECONDS
           fi
           echo "seconds $duration"
