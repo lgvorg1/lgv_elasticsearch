@@ -128,7 +128,7 @@ jobs:
             echo "Executing over history"
             echo "***********************"
             SECONDS=0
-            /usr/bin/time --verbose ${GITHUB_WORKSPACE}/scanner/xygeni scan  --never-fail  -f none --include-collaborators --run="secrets" --secrets-mode=history --no-conf-download -n ${{ env.XY_PRJ_NAME }} --dir ${GITHUB_WORKSPACE} -e **/scanner/**
+            /usr/bin/time --verbose ${GITHUB_WORKSPACE}/scanner/xygeni scan  --never-fail  -f sarif -o results.gl.sarif.${{ github.event.repository.name }}.history --include-collaborators --run="secrets" --secrets-mode=history --no-conf-download -n ${{ env.XY_PRJ_NAME }} --dir ${GITHUB_WORKSPACE} -e **/scanner/**
             duration=$SECONDS
             echo Number of commits $(git log | grep "Author:" | wc -l)
           else
@@ -136,7 +136,7 @@ jobs:
             echo "Not including history"
             echo "***********************"
             SECONDS=0
-            /usr/bin/time --verbose ${GITHUB_WORKSPACE}/scanner/xygeni scan  --never-fail  -f none --include-collaborators --run="secrets"  --no-conf-download -n ${{ env.XY_PRJ_NAME }} --dir ${GITHUB_WORKSPACE} -e **/scanner/**
+            /usr/bin/time --verbose ${GITHUB_WORKSPACE}/scanner/xygeni scan  --never-fail  -f sarif -o results.gl.sarif.${{ github.event.repository.name }}.nogit --include-collaborators --run="secrets"  --no-conf-download -n ${{ env.XY_PRJ_NAME }} --dir ${GITHUB_WORKSPACE} -e **/scanner/**
             duration=$SECONDS
           fi
           echo "===================================================================="
@@ -171,12 +171,13 @@ jobs:
           # Optional whether this connection use TLS (default is true if server_port is 465)
           secure: true
           # Required mail subject:
-          subject: Github Actions job result
+          subject: Secrets Xygeni [history=${{ github.event.inputs.secret-history }}] [results.xy.sarif.${{ github.event.repository.name }}]
           # Required recipients' addresses:
           to: luis.garcia@xygeni.io
           # Required sender full name (address can be skipped):
           from: Luke Skywalker # <user@example.com>
           # Optional plain body:  
           body: INTERNAL Secret .\n Build job of ${{github.repository}} completed successfully!
+          attachments: results.*
 
 
