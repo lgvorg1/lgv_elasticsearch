@@ -140,5 +140,9 @@ jobs:
           echo Number of text files : $(grep -rIl '' | xargs wc -l | grep -v " 0" | wc -l  )
           echo Lines in text files 1: $(grep -rIl '' | xargs wc -l | head -n -1 | awk '{total +=$1} END{print total}' )
           echo Lines in text files 2: $(grep -rIl '' | xargs wc -l | grep -v " 0" | head -n -1 | awk '{total +=$1} END{print total}' )
+          
+          export LOC=$(grep -rIl '' | xargs wc -l | head -n -1 | awk '{total +=$1} END{print total}' )
+          echo LOC/sec $(($LOC / $duration))
+          
         env:
           GITHUB_PAT: ${{ secrets.GH_PAT }}
