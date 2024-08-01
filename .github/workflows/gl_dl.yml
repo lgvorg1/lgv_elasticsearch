@@ -46,13 +46,13 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
-        name: Checking out main code
-        if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
-        with:
-          # Number of commits to fetch. 0 indicates all history for all branches and tags..
-          # Default: 1
-          fetch-depth: '0'
+      #- uses: actions/checkout@v4
+      #  name: Checking out main code
+      #  if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+      #  with:
+      #    # Number of commits to fetch. 0 indicates all history for all branches and tags..
+      #    # Default: 1
+      #    fetch-depth: '0'
 
 
 
@@ -62,7 +62,7 @@ jobs:
           echo Downloading GL ....
 
           #curl -o /tmp/gitleaks.tmp  https://github.com/zricethezav/gitleaks/releases/download/v8.16.1/gitleaks_8.16.1_linux_x64.tar.gz
-          wget https://github.com/zricethezav/gitleaks/releases/download/v8.16.1/gitleaks_8.16.1_linux_x64.tar.gz
+          wget -O /tmp/gitleaks.tmp https://github.com/zricethezav/gitleaks/releases/download/v8.16.1/gitleaks_8.16.1_linux_x64.tar.gz
           /usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /tmp/gitleaks-8.16.1 -f /tmp/gitleaks.tmp
           ls -l /tmp/git*
           /usr/bin/tar --posix -z -cf cache.tgz -P -C /home/runner/work/elasticsearch/elasticsearch --files-from manifest.txt
