@@ -105,7 +105,7 @@ jobs:
           # Optional whether this connection use TLS (default is true if server_port is 465)
           secure: true
           # Required mail subject:
-          subject: Secrets GitLeaks [history=${{ github.event.inputs.secret-history }}] [results.gl.sarif.${{ github.event.repository.name }}] 
+          subject: Secrets [tool=GitLeaks] [repo=${{ github.event.repository.name }}] [history=${{ github.event.inputs.secret-history }}]
           # Required recipients' addresses:
           to: luis.garcia@xygeni.io
           # Required sender full name (address can be skipped):
