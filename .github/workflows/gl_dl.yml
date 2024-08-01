@@ -68,8 +68,8 @@ jobs:
           /usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /tmp/gitleaks-8.16.1 -f /tmp/gitleaks.tmp
           #/usr/bin/tar --posix -z -cf cache.tgz -P -C /home/runner/work/elasticsearch/elasticsearch --files-from manifest.txt
           SECONDS=0
-          #/usr/bin/time --verbose /tmp/gitleaks-8.16.1/gitleaks detect --redact -v --exit-code=2 --report-format=sarif --report-path=results.sarif --log-level=debug
-          /usr/bin/time --verbose /tmp/gitleaks-8.16.1/gitleaks detect --redact --no-git --exit-code=2 --report-format=sarif --report-path=results.sarif --log-level=debug
+          /usr/bin/time --verbose /tmp/gitleaks-8.16.1/gitleaks detect --redact           --exit-code=2 --report-format=sarif --report-path=results.sarif --log-level=debug
+          #/usr/bin/time --verbose /tmp/gitleaks-8.16.1/gitleaks detect --redact --no-git --exit-code=2 --report-format=sarif --report-path=results.sarif --log-level=debug
           duration=$SECONDS
           echo "seconds $duration"
           echo "$((duration / 60)) minutes and $((duration % 60)) seconds elapsed."
