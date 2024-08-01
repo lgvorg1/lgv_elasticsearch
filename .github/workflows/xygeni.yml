@@ -74,6 +74,32 @@ jobs:
               ;;
           esac
 
+      - name: Send mail from INTERNAL 
+        if: always()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          # Specify connection via URL (replaces server_address, server_port, secure, 
+          # username and password)
+          #
+          # Format:
+          #
+          #  * smtp://user:password@server:port
+          #  * smtp+starttls://user:password@server:port
+          connection_url: ${{secrets.MAIL_CONNECTION}}
+          # Required mail server address if not connection_url:
+          server_address: smtp.gmail.com
+          # Server port, default 25:
+          server_port: 465
+          # Optional whether this connection use TLS (default is true if server_port is 465)
+          secure: true
+          # Required mail subject:
+          subject: Github Actions job result
+          # Required recipients' addresses:
+          to: xyexternal@gmail.com
+          # Required sender full name (address can be skipped):
+          from: Luke Skywalker # <user@example.com>
+          # Optional plain body:  
+          body: INTERNAL Secret .\n Build job of ${{github.repository}} completed successfully!
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v4
@@ -149,8 +175,7 @@ jobs:
           export LOC=$(grep -rIl '' | xargs wc -l | head -n -1 | awk '{total +=$1} END{print total}' )
           echo LOC/sec $(($LOC / $duration))
 
-
-          
-          
         env:
           GITHUB_PAT: ${{ secrets.GH_PAT }}
+
+
