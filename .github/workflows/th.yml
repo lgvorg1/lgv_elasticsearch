@@ -26,9 +26,5 @@ jobs:
       with:
         #extra_args: --only-verified --json
         extra_args: --no-verification 
-    - name: Secret Scanning (adv)
-      uses: trufflesecurity/trufflehog@main
-      with:
-        #extra_args: --only-verified --json
-        extra_args: --no-verification 
+
 
