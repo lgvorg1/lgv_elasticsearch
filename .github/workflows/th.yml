@@ -1,0 +1,27 @@
+name: TH
+
+
+on:
+  #push:
+  #  branches:
+  #    - main
+  #pull_request:
+  workflow_dispatch:
+    inputs:
+      secret-history:
+          type: boolean
+          description: Include git history ?
+          default: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Secret Scanning
+      uses: trufflesecurity/trufflehog@main
+      with:
+        extra_args: --only-verified
