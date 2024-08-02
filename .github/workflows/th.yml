@@ -25,7 +25,7 @@ jobs:
       uses: trufflesecurity/trufflehog@main
       with:
         #extra_args: --only-verified
-        extra_args: --no-verification
+        extra_args: --no-verification --json 
 
   th_adv:
     runs-on: ubuntu-latest
@@ -40,4 +40,4 @@ jobs:
         base: ""
         head: ${{ github.ref_name }}
         #extra_args: --only-verified
-        extra_args: --no-verification 
+        extra_args: --no-verification --json 
