@@ -27,4 +27,4 @@ jobs:
         base: ""
         head: ${{ github.ref_name }}
         #extra_args: --only-verified
-        extra_args: --no-verification
+        extra_args: --no-verification --github-actions
