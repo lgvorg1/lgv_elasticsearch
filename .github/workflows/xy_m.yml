@@ -1,0 +1,113 @@
+# This is a basic workflow to help you get started with Actions 
+
+name: GL_DL
+
+# Controls when the workflow will run
+on:
+  #push: 
+  #  branches: [ "main" ]
+  # Triggers the workflow on pull request events for the "main" branch
+  #pull_request_target: 
+  #  branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab sd 
+  workflow_dispatch:
+    inputs:
+      secret-history:
+          type: boolean
+          description: Include git history ?
+          default: true
+
+ env:
+  INCLUDE_GIT_HISTORY: ${{ github.event.inputs.secret-history }}
+
+jobs:
+  # This workflow contains a single job called "xygeni_security_scan"
+  xygeni_cicd_scan:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    # ref: "refs/pull/${{ github.event.number }}/merge"
+    # ref: ${{ github.event.pull_request.head.sha }}
+  
+    steps:
+
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+        name: Checking out PR code
+        if: ${{ github.event_name == 'pull_request_target' }}
+        with:
+          # Number of commits to fetch. 0 indicates all history for all branches and tags.
+          # Default: 1
+          fetch-depth: '0'
+          # This is to get the PR code instead of the repo code
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+        name: Checking out main code
+        if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+        with:
+          # Number of commits to fetch. 0 indicates all history for all branches and tags..
+          # Default: 1
+          fetch-depth: '0'
+
+
+
+      # Runs a set of commands using the runners shell 
+      - name: Download Xy-m 
+        run: |
+          set +e
+          echo Downloading GL ....
+
+          wget -O /tmp/xy_m.tmp https://github.com/xygeni/mend-xygeni/releases/download/4.31.0/xygeni-mend-oem-4.31.0.zip
+          mkdir /tmp/xy_m-4.31.0
+          /usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /tmp/xy_m-4.31.0 -f /tmp/xy_m.tmp
+          #/usr/bin/tar --posix -z -cf cache.tgz -P -C /home/runner/work/elasticsearch/elasticsearch --files-from manifest.txt
+
+          if [ "$INCLUDE_GIT_HISTORY" == "true" ]; then
+            echo "***********************"
+            echo "Executing over history"
+            echo "***********************"
+            SECONDS=0
+            /usr/bin/time --verbose /tmp/xy_m-4.31.0/xygeni scan  --never-fail  -f sarif -o ${GITHUB_WORKSPACE}/results.xy_m.sarif.${{ github.event.repository.name }}.history --include-collaborators --run="secrets" --secrets-mode=history --no-conf-download -n ${{ env.XY_PRJ_NAME }} --dir ${GITHUB_WORKSPACE} -e **/scanner/**
+            duration=$SECONDS
+          else
+            echo "***********************"
+            echo "Not including history"
+            echo "***********************"
+            SECONDS=0
+            /usr/bin/time --verbose /tmp/xy_m-4.31.0/xygeni scan  --never-fail  -f sarif -o ${GITHUB_WORKSPACE}/results.xy_m.sarif.${{ github.event.repository.name }}.nogit --include-collaborators --run="secrets"  --no-conf-download -n ${{ env.XY_PRJ_NAME }} --dir ${GITHUB_WORKSPACE} -e **/scanner/**
+            duration=$SECONDS
+          fi
+          echo "seconds $duration"
+          echo "$((duration / 60)) minutes and $((duration % 60)) seconds elapsed."
+          
+      - name: Send mail from INTERNAL 
+        if: always()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          # Specify connection via URL (replaces server_address, server_port, secure, 
+          # username and password)
+          #
+          # Format:
+          #
+          #  * smtp://user:password@server:port
+          #  * smtp+starttls://user:password@server:port
+          connection_url: ${{secrets.MAIL_CONNECTION}}
+          # Required mail server address if not connection_url:
+          server_address: smtp.gmail.com
+          # Server port, default 25:
+          server_port: 465
+          # Optional whether this connection use TLS (default is true if server_port is 465)
+          secure: true
+          # Required mail subject:
+          subject: Secrets [tool=Xygeni_m] [repo=${{ github.event.repository.name }}] [history=${{ github.event.inputs.secret-history }}]
+          # Required recipients' addresses:
+          to: luis.garcia@xygeni.io
+          # Required sender full name (address can be skipped):
+          from: Luke Skywalker # <user@example.com>
+          # Optional plain body:  
+          body: INTERNAL Secret .\n Build job of ${{github.repository}} completed successfully!
+          attachments: secrets.results.*
