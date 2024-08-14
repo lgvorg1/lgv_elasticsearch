@@ -62,8 +62,9 @@ jobs:
           echo Downloading GL ....
 
           wget -O /tmp/xy_m.tmp https://github.com/xygeni/mend-xygeni/releases/download/4.31.0/xygeni-mend-oem-4.31.0.zip
+          curl -H 'Authorization: token ${{ secrets.GH_PAT }} ' -O  -L https://github.com/xygeni/mend-xygeni/releases/download/4.31.0/xygeni-mend-oem-4.31.0.zip
           mkdir /tmp/xy_m-4.31.0
-          /usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /tmp/xy_m-4.31.0 -f /tmp/xy_m.tmp
+          /usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /tmp/xy_m-4.31.0 -f xygeni-mend-oem-4.31.0.zip
           #/usr/bin/tar --posix -z -cf cache.tgz -P -C /home/runner/work/elasticsearch/elasticsearch --files-from manifest.txt
 
           if [ "$INCLUDE_GIT_HISTORY" == "true" ]; then
