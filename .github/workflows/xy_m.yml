@@ -45,13 +45,13 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
-        name: Checking out main code
-        if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
-        with:
-          # Number of commits to fetch. 0 indicates all history for all branches and tags..
-          # Default: 1
-          fetch-depth: '0'
+      #- uses: actions/checkout@v4
+      #  name: Checking out main code
+      #  if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+      #  with:
+      #    # Number of commits to fetch. 0 indicates all history for all branches and tags..
+      #    # Default: 1
+      #    fetch-depth: '0'
 
 
 
@@ -63,6 +63,7 @@ jobs:
 
           wget -O /tmp/xy_m.tmp https://github.com/xygeni/mend-xygeni/releases/download/4.31.0/xygeni-mend-oem-4.31.0.zip
           curl -H 'Authorization: token ${{ secrets.GH_PAT }} ' -O  -L https://github.com/xygeni/mend-xygeni/releases/download/4.31.0/xygeni-mend-oem-4.31.0.zip
+          ls -l
           mkdir /tmp/xy_m-4.31.0
           /usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /tmp/xy_m-4.31.0 -f xygeni-mend-oem-4.31.0.zip
           #/usr/bin/tar --posix -z -cf cache.tgz -P -C /home/runner/work/elasticsearch/elasticsearch --files-from manifest.txt
