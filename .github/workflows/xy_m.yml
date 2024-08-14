@@ -18,7 +18,7 @@ on:
           description: Include git history ?
           default: true
 
- env:
+env:
   INCLUDE_GIT_HISTORY: ${{ github.event.inputs.secret-history }}
 
 jobs:
