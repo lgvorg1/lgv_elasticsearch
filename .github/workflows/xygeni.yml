@@ -91,13 +91,13 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
-        name: Checking out main code
-        if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
-        with:
-          # Number of commits to fetch. 0 indicates all history for all branches and tags..
-          # Default: 1
-          fetch-depth: '0'
+      #- uses: actions/checkout@v4
+      #  name: Checking out main code
+      #  if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+      #  with:
+      #    # Number of commits to fetch. 0 indicates all history for all branches and tags..
+      #    # Default: 1
+      #    fetch-depth: '0'
 
 
 
