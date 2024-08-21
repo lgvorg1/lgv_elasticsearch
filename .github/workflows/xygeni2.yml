@@ -121,7 +121,7 @@ jobs:
           echo Number of text files : $(grep -rIl '' | xargs wc -l | grep -v " 0" | wc -l  )
           echo Lines in text files 1: $(grep -rIl '' | xargs wc -l | head -n -1 | awk '{total +=$1} END{print total}' )
           echo Lines in text files 2: $(grep -rIl '' | xargs wc -l | grep -v " 0" | head -n -1 | awk '{total +=$1} END{print total}' )
-          echo Executing Xygeni scan ....    no HISTORY
+          echo Executing Xygeni scan ....    "$XY_ENV" "INCLUDE_GIT_HISTORY" "$INCLUDE_GIT_HISTORY"
 
           if [ "$INCLUDE_GIT_HISTORY" == "true" ]; then
             echo "***********************"
