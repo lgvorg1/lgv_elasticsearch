@@ -130,7 +130,7 @@ jobs:
             echo "Executing over history" "$XY_ENV"
             echo "***********************"
             SECONDS=0
-            /usr/bin/time --verbose ${GITHUB_WORKSPACE}/scanner/xygeni scan  --never-fail  -f sarif -o ${GITHUB_WORKSPACE}/results.xy.sarif.${{ github.event.repository.name }}.history --include-collaborators --run="secrets" --secrets-mode=history --no-conf-download -n ${{ env.XY_PRJ_NAME }} --dir ${GITHUB_WORKSPACE} -e **/scanner/**
+            /usr/bin/time --verbose ${GITHUB_WORKSPACE}/scanner/xygeni scan  --never-fail  -f sarif -o ${GITHUB_WORKSPACE}/results.xy.sarif.${{ github.event.repository.name }}.history --run="secrets" --secrets-mode=history --no-conf-download -n ${{ env.XY_PRJ_NAME }} --dir ${GITHUB_WORKSPACE} -e **/scanner/**
             duration=$SECONDS
             echo Number of commits $(git log | grep "Author:" | wc -l)
           else
@@ -138,7 +138,7 @@ jobs:
             echo "Not including history" "$XY_ENV"
             echo "***********************"
             SECONDS=0
-            /usr/bin/time --verbose ${GITHUB_WORKSPACE}/scanner/xygeni scan  --never-fail  -f sarif -o ${GITHUB_WORKSPACE}/results.xy.sarif.${{ github.event.repository.name }}.nogit --include-collaborators --run="secrets"  --no-conf-download -n ${{ env.XY_PRJ_NAME }} --dir ${GITHUB_WORKSPACE} -e **/scanner/**
+            /usr/bin/time --verbose ${GITHUB_WORKSPACE}/scanner/xygeni scan  --never-fail  -f sarif -o ${GITHUB_WORKSPACE}/results.xy.sarif.${{ github.event.repository.name }}.nogit --run="secrets"  --no-conf-download -n ${{ env.XY_PRJ_NAME }} --dir ${GITHUB_WORKSPACE} -e **/scanner/**
             duration=$SECONDS
           fi
           ls -l
