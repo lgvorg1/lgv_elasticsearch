@@ -16,7 +16,7 @@ on:
       secret-history:
           type: boolean
           description: Include git history ?
-          default: true
+          default: false
       xy-env:
           type: choice
           description: Xygeni Env
